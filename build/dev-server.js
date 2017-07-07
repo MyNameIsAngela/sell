@@ -21,6 +21,43 @@ var autoOpenBrowser = !!config.dev.autoOpenBrowser
 var proxyTable = config.dev.proxyTable
 
 var app = express()
+//star edit
+// 数据读取
+var appData = require('../data.json'); 
+var seller = appData.seller;
+var goods = appData.goods;
+var ratings = appData.ratings;
+
+// 编写路由
+var apiRoutes = express.Router();
+// 编写接口
+apiRoutes.get('/seller',function(req,res){
+  res.json({
+    errno: 0,  // 规范：返回接口，使用字段errno 定义为0，标识数据正常
+    data:seller
+  });
+});
+
+apiRoutes.get('/goods',function(req,res){
+  res.json({
+    errno:0,
+    data:goods
+  });
+});
+
+apiRoutes.get('/ratings',function(req,res){
+  res.json({
+    errno:0,
+    data:ratings
+  });
+});
+
+// app.use方法 第一个参数是path 所有接口相关api 都会用api这个路由，路由到具体的路由
+// 这样就可以通过／api/goods 就可以取到goods数据 如：localhost:8080/api/seller 可以取到seller的数据
+app.use('/api', apiRoutes);
+
+//end 
+
 var compiler = webpack(webpackConfig)
 
 var devMiddleware = require('webpack-dev-middleware')(compiler, {
